@@ -1,0 +1,32 @@
+﻿<!DOCTYPE html>
+<html lang="sv">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] – Digital Normvandring</title>
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+</head>
+<body>
+<nav class="navbar">
+    <a class="navbar-brand" href="/">
+        <img src="/images/logga.png" alt="Högskolan Väst" class="navbar-logga" />
+        <span class="navbar-text">Digital Normvandring</span>
+    </a>
+    <div class="nav-links">
+        <a href="/" class="nav-link">Hem</a>
+        <a href="/Konstverk" class="nav-link">Konstverk</a>
+        <a href="/KLC" class="nav-link">KLC-miljön</a>
+        <a href="/Reflektera" class="nav-link">Reflektera</a>
+    </div>
+</nav>
+
+<main>
+    @RenderBody()
+</main>
+
+<footer class="footer">
+    <p>Digital Normvandring · Högskolan Väst · KLC</p>
+    <p>Ett projekt av grupp 5 – PPB302 VT 2026</p>
+</footer>
+</body>
+</html>

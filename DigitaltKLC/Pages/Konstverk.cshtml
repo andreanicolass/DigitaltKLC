@@ -1,0 +1,213 @@
+﻿@page
+@model KonstverkModel
+@{
+    ViewData["Title"] = "Konstverk";
+}
+
+<style>
+    .galleri-wrapper {
+        max-width: 800px;
+        margin: 0 auto;
+        padding: 48px 40px 80px;
+    }
+    .bild-raknare { text-align: center; margin-bottom: 16px; }
+    .bild-raknare span {
+        font-size: 13px; color: #888;
+        background: #f5f5f5; padding: 4px 16px;
+        border-radius: 20px; font-weight: 500;
+    }
+    .bild-visare {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        justify-content: center;
+        gap: 20px;
+        margin-bottom: 24px;
+    }
+    .bild-container {
+        width: 620px;
+        height: 460px;
+        flex-shrink: 0;
+        background: #f5f5f5;
+        border: 1px solid #ddd;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        overflow: hidden;
+    }
+    .konstverks-bild {
+        width: 100%;
+        height: 100%;
+        object-fit: contain;
+        display: block;
+    }
+    .pil-knapp {
+        width: 52px; height: 52px;
+        border-radius: 50%;
+        border: 2px solid #1a1a2e;
+        background: #fff; color: #1a1a2e;
+        font-size: 24px; font-weight: 700;
+        cursor: pointer; flex-shrink: 0;
+        display: flex; align-items: center; justify-content: center;
+        transition: all 0.2s;
+    }
+    .pil-knapp:hover { background: #1a1a2e; color: #fff; }
+    .verk-text-panel {
+        background: #fff;
+        border: 1px solid #e0e0e0;
+        border-top: 3px solid #1a1a2e;
+        padding: 32px;
+        margin-bottom: 24px;
+    }
+    .verk-text-panel h2 { font-size: 22px; font-weight: 800; margin-bottom: 12px; text-transform: uppercase; }
+    .verk-text-panel p { font-size: 15px; color: #444; margin-bottom: 12px; line-height: 1.8; }
+    .tag-rad { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 14px; }
+    .tag { font-size: 11px; padding: 4px 12px; border-radius: 20px; font-weight: 600; }
+    .tag.lila { background: #f0eefe; color: #3C3489; }
+    .tag.gron { background: #eaf5ee; color: #085041; }
+    .tag.rod  { background: #fdf0ed; color: #712B13; }
+    .reflektions-box { background: #f5f5f5; padding: 20px; margin-top: 20px; border-left: 3px solid #1a1a2e; }
+    .reflektions-box h4 { font-size: 14px; font-weight: 700; margin-bottom: 12px; }
+    .reflektions-box ol { padding-left: 20px; }
+    .reflektions-box li { font-size: 14px; color: #444; margin-bottom: 8px; line-height: 1.6; }
+    .miniatyr-rad { display: flex; justify-content: center; gap: 10px; }
+    .miniatyr {
+        width: 42px; height: 42px;
+        border: 2px solid #ddd; background: #fff;
+        color: #999; font-size: 14px; font-weight: 700; cursor: pointer; transition: all 0.2s;
+    }
+    .miniatyr:hover { border-color: #1a1a2e; color: #1a1a2e; }
+    .miniatyr.aktiv { background: #1a1a2e; border-color: #1a1a2e; color: #fff; }
+</style>
+
+<section class="page-header">
+    <h1>Elisabeth Ohlsons konstverk</h1>
+    <p>Klicka på pilarna för att bläddra mellan konstverken.</p>
+</section>
+
+<section class="galleri-wrapper">
+
+    <div class="bild-raknare">
+        <span id="raknare">1 / 5</span>
+    </div>
+
+    <div class="bild-visare">
+        <button class="pil-knapp" onclick="foregaende()">&#8592;</button>
+        <div class="bild-container">
+            <img id="konstverks-bild" class="konstverks-bild" src="/images/konstverk1.jpg" alt="" />
+        </div>
+        <button class="pil-knapp" onclick="nasta()">&#8594;</button>
+    </div>
+
+    <div class="verk-text-panel">
+        <div class="tag-rad" id="tags"></div>
+        <h2 id="verk-titel"></h2>
+        <p id="verk-beskrivning1"></p>
+        <p id="verk-beskrivning2"></p>
+        <div class="reflektions-box">
+            <h4>💭 Reflektera</h4>
+            <ol id="reflektions-fragor"></ol>
+        </div>
+    </div>
+
+    <div class="miniatyr-rad">
+        <button class="miniatyr aktiv" onclick="gaTill(0)">1</button>
+        <button class="miniatyr" onclick="gaTill(1)">2</button>
+        <button class="miniatyr" onclick="gaTill(2)">3</button>
+    </div>
+
+</section>
+
+<script>
+    const konstverk = [
+        {
+            titel: "Mödrar ser olika ut",
+            bild: "/images/konstverk1.jpg",
+            tags: [
+                { text: "Könsroller", klass: "lila" },
+                { text: "Familjenormer", klass: "gron" },
+                { text: "Moderskapsbild", klass: "rod" }
+            ],
+            beskrivning1: "Elisabeth Ohlson fick i uppdrag att skapa ett konstverk för sjuksköterskornas korridor. Med sitt normkritiska perspektiv valde hon att visa att mödrar kan se ut på många olika sätt.",
+            beskrivning2: "I vården möter vi patienter med väldigt olika familjekonstellationer och bakgrunder. Att bära på förutfattade meningar kan påverka kvaliteten på den vård vi ger.",
+            fragor: [
+                "Vilken bild har du av en typisk mamma? Varifrån kommer den bilden?",
+                "Hur kan dina förväntningar påverka hur du bemöter en patient och deras närstående?",
+                "Vad innebär jämlik vård i mötet med familjer som ser annorlunda ut än normen?"
+            ]
+        },
+        {
+            titel: "Spegelbilden",
+            bild: "/images/Konstverk2.png",
+            tags: [
+                { text: "HBTQ", klass: "lila" },
+                { text: "Könsidentitet", klass: "gron" },
+                { text: "Normkritik", klass: "rod" }
+            ],
+            beskrivning1: "Elisabeth Ohlson var väldigt inriktad på att lyfta HBTQ-frågor. Det här konstverket representerar att en person bakifrån inte alltid ser ut som förväntat genom spegeln.",
+            beskrivning2: "Konstverket påminner oss om att vi inte kan anta något om en persons identitet utifrån yttre attribut – något som är centralt i ett respektfullt vårdmöte.",
+            fragor: [
+                "Hur påverkar dina förväntningar om kön och utseende hur du bemöter en patient?",
+                "Vad behöver du som vårdpersonal tänka på för att alla patienter ska känna sig sedda?",
+                "Hur skapar du ett tryggt och inkluderande vårdmöte för HBTQ-personer?"
+            ]
+        },
+        {
+            titel: "Mannen i mitten",
+            bild: "/images/konstverk3.png",
+            tags: [
+                { text: "Anonymitet", klass: "lila" },
+                { text: "Stadsliv", klass: "gron" },
+                { text: "Medmänsklighet", klass: "rod" }
+            ],
+            beskrivning1: "Den här bilden tog Elisabeth Ohlson i farten när hon befann sig i Stockholm. Den visar hur alla har sina egna liv och att man inte alltid är vaksam kring vad som finns runtomkring en.",
+            beskrivning2: "I vården möter vi dagligen människor vars livshistorier vi inte känner till. Bilden påminner oss om vikten av nyfikenhet och närvaro i varje möte.",
+            fragor: [
+                "Hur ofta stannar du upp och verkligen ser den person du möter i vården?",
+                "Vad händer när vi slutar vara nyfikna på patienternas livsvillkor?",
+                "Hur kan du som vårdpersonal skapa närvaro i ett stressigt arbete?"
+            ]
+        },
+    ];
+
+    let aktivIndex = 0;
+
+    function visaVerk(index) {
+        const v = konstverk[index];
+        document.getElementById('raknare').textContent = (index + 1) + ' / ' + konstverk.length;
+        document.getElementById('konstverks-bild').src = v.bild;
+        document.getElementById('verk-titel').textContent = v.titel;
+
+        const tagRad = document.getElementById('tags');
+        tagRad.innerHTML = '';
+        v.tags.forEach(t => {
+            const span = document.createElement('span');
+            span.className = 'tag ' + t.klass;
+            span.textContent = t.text;
+            tagRad.appendChild(span);
+        });
+
+        document.getElementById('verk-beskrivning1').textContent = v.beskrivning1;
+        document.getElementById('verk-beskrivning2').textContent = v.beskrivning2;
+
+        const fragorLista = document.getElementById('reflektions-fragor');
+        fragorLista.innerHTML = '';
+        v.fragor.forEach(f => {
+            const li = document.createElement('li');
+            li.textContent = f;
+            fragorLista.appendChild(li);
+        });
+
+        document.querySelectorAll('.miniatyr').forEach((m, i) => {
+            m.classList.toggle('aktiv', i === index);
+        });
+
+        aktivIndex = index;
+    }
+
+    function nasta() { visaVerk((aktivIndex + 1) % konstverk.length); }
+    function foregaende() { visaVerk((aktivIndex - 1 + konstverk.length) % konstverk.length); }
+    function gaTill(index) { visaVerk(index); }
+
+    visaVerk(0);
+</script>
